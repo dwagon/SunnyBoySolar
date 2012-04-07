@@ -1,8 +1,8 @@
 #!/opt/local/bin/python2.7
 
 import os, sys
-os.environ['DJANGO_SETTINGS_MODULE']='solar.settings'
-from solar.sunrecord.models import Day,Hour
+os.environ['DJANGO_SETTINGS_MODULE']='SunnyBoySolar.settings'
+from SunnyBoySolar.sunrecord.models import Day,Hour
 
 ################################################################################
 def graphOverTime():
