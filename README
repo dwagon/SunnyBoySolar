@@ -1,0 +1,7 @@
+This code grabs data from a SunnyBoy PhotoVoltaicCell Regulator which you access by plugging the remote bluetooth unit into your computer with USB.
+
+This mounts as /Volume/NO NAME on a Mac, but will be something different on other OS.
+
+Running the importer will pull data from the Sunny Boy and add it to the Django database.
+
+The the graph.py script will generate a bunch of csv files that I found interesting, that you can then import into whichever graphing software you prefer
