@@ -29,11 +29,11 @@ def analyseFile(fname, conn):
     daybits = daystr.split('-')
     date = datetime.date(int(daybits[0])+2000, int(daybits[1]), int(daybits[2]))
     curs = conn.cursor()
-    curs.execute(f"SELECT id FROM day WHERE date={date}")
+    curs.execute(f"SELECT id FROM day WHERE date='{date}'")
     dayid = curs.fetchone()
     if not dayid:
-        curs.execute(f"INSERT INTO day (date, today, total) VALUES ({date}, 0.0, 0.0)")
-        curs.execute(f"SELECT id FROM day WHERE date={date}")
+        curs.execute(f"INSERT INTO day (date, today, total) VALUES ('{date}', 0.0, 0.0)")
+        curs.execute(f"SELECT id FROM day WHERE date='{date}'")
         dayid = curs.fetchone()
 
     with open(fname) as fh:
@@ -53,7 +53,7 @@ def analyse_hour(conn, dayid, line):
     ampm = t[5:7]
     if ampm == 'pm' and hour != 12:
         hour += 12
-    time = datetime.time(hour, minute, 00)
+    time = datetime.time(hour, minute, 0)
     curs.execute(f"SELECT id FROM hour WHERE day={dayid} AND hour={hour}")
     hourid = curs.fetchone()
     if not hourid:
@@ -62,8 +62,7 @@ def analyse_hour(conn, dayid, line):
         hourid = curs.fetchone()
     hourid = hourid[0]
 
-    sql = f"UPDATE hour SET time='{time}', power={float(power)} WHERE day={dayid} AND hour={hour}"
-    print(sql)
+    sql = f"UPDATE hour SET time='{time}', power={float(power)} WHERE id={hourid}"
     curs.execute(sql)
 
 
@@ -79,12 +78,12 @@ def analyse_line(conn, line, dayid):
         pwr = line.split(';')[1]
         if pwr:
             today = float(pwr)
-            curs.execute(f"UPDATE day SET (today) VAULES ({today}) WHERE id={dayid}")
+            curs.execute(f"UPDATE day SET today={today} WHERE id={dayid}")
     if line.startswith('E-Total'):
         pwr = line.split(';')[1]
         if pwr:
             total = float(pwr)
-            curs.execute(f"UPDATE day SET (total) VAULES ({total}) WHERE id={dayid}")
+            curs.execute(f"UPDATE day SET total={total} WHERE id={dayid}")
 
 
 ################################################################################
